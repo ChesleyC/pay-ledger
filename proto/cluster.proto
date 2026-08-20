@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package payledger.v1;
+
+option go_package = "github.com/ChesleyC/pay-ledger/proto;payledgerv1";
+
+// ClusterService is intentionally tiny. HashiCorp Raft owns consensus traffic;
+// this gRPC API lets nodes and diagnostics discover the current leader.
+service ClusterService {
+  rpc GetStatus(StatusRequest) returns (StatusResponse);
+}
+
+message StatusRequest {}
+
+message StatusResponse {
+  string node_id = 1;
+  string state = 2;
+  bool is_leader = 3;
+  string leader_id = 4;
+  string leader_raft_address = 5;
+  string leader_http_address = 6;
+  uint64 last_log_index = 7;
+  uint64 applied_index = 8;
+}

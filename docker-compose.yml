@@ -1,0 +1,61 @@
+x-node: &node
+  build: .
+  restart: unless-stopped
+  networks: [payledger]
+
+services:
+  node1:
+    <<: *node
+    command:
+      - -id=node1
+      - -raft-addr=node1:7000
+      - -http-advertise=http://localhost:8081
+      - -grpc-advertise=node1:9090
+      - -data-dir=/data
+      - -bootstrap=true
+      - -raft-bind=:7000
+      - -grpc-addr=:9090
+      - -http-addr=:8080
+      - -peers=node1@node1:7000@http://localhost:8081@node1:9090,node2@node2:7000@http://localhost:8082@node2:9090,node3@node3:7000@http://localhost:8083@node3:9090
+    ports: ["8081:8080", "9091:9090"]
+    volumes: ["node1-data:/data"]
+
+  node2:
+    <<: *node
+    command:
+      - -id=node2
+      - -raft-addr=node2:7000
+      - -http-advertise=http://localhost:8082
+      - -grpc-advertise=node2:9090
+      - -data-dir=/data
+      - -bootstrap=true
+      - -raft-bind=:7000
+      - -grpc-addr=:9090
+      - -http-addr=:8080
+      - -peers=node1@node1:7000@http://localhost:8081@node1:9090,node2@node2:7000@http://localhost:8082@node2:9090,node3@node3:7000@http://localhost:8083@node3:9090
+    ports: ["8082:8080", "9092:9090"]
+    volumes: ["node2-data:/data"]
+
+  node3:
+    <<: *node
+    command:
+      - -id=node3
+      - -raft-addr=node3:7000
+      - -http-advertise=http://localhost:8083
+      - -grpc-advertise=node3:9090
+      - -data-dir=/data
+      - -bootstrap=true
+      - -raft-bind=:7000
+      - -grpc-addr=:9090
+      - -http-addr=:8080
+      - -peers=node1@node1:7000@http://localhost:8081@node1:9090,node2@node2:7000@http://localhost:8082@node2:9090,node3@node3:7000@http://localhost:8083@node3:9090
+    ports: ["8083:8080", "9093:9090"]
+    volumes: ["node3-data:/data"]
+
+networks:
+  payledger:
+
+volumes:
+  node1-data:
+  node2-data:
+  node3-data:
