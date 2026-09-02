@@ -2,8 +2,6 @@
 
 PayLedger is a small, fault-tolerant payment idempotency service written in Go. A client can safely retry an ambiguous request: a three-node HashiCorp Raft cluster commits the write once, and a Badger transaction atomically stores the payment with its idempotency key.
 
-The project is intentionally educational. It demonstrates one hard backend guarantee without growing into a banking platform or a general-purpose database.
-
 ## How it works
 
 ```text
